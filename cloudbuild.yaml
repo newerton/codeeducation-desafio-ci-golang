@@ -1,0 +1,22 @@
+steps:
+  - id: "Instalando Application"
+    name: "gcr.io/cloud-builders/go"
+    args: ["install", "sum"]
+    env: ["GOPATH=."]
+
+  - id: "Instalando Application TEST"
+    name: "gcr.io/cloud-builders/go"
+    args: ["test", "sum"]
+    env: ["GOPATH=."]
+
+  - id: "Image Build"
+    name: "gcr.io/cloud-builders/docker"
+    args: ["build", "--tag=gcr.io/$PROJECT_ID/go-sum:$SHORT_SHA", "."]
+
+  - id: "Image Push"
+    name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/go-sum:$SHORT_SHA"]
+
+  - id: "Run Container"
+    name: "gcr.io/cloud-builders/docker"
+    args: ["run", "gcr.io/$PROJECT_ID/go-sum:$SHORT_SHA"]
